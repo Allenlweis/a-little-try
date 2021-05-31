@@ -1,8 +1,13 @@
 # NotePad
 功能设计介绍 
+
+
 添加时间戳功能：
+
  1.添加时间戳的位置在主页面的每个列表项中添加，即在notelist_item.xml布局文件中添加一个 
-   <TextView  
+   
+   
+     <TextView  
        android:id="@android:id/text2"  
        android:layout_width="match_parent"  
        android:layout_height="wrap_content"  
@@ -12,32 +17,40 @@
        android:singleLine="true" />  `
 
 2.在NoteList类的PROJECTION中添加COLUMN_NAME_MODIFICATION_DATE字段(该字段在NotePad中有说明) 
-  // The columns needed by the cursor adapter
-  private static final String[] PROJECTION = new String[] {    
+
+
+    // The columns needed by the cursor adapter
+    private static final String[] PROJECTION = new String[] {    
       NotePad.Notes._ID, // 0    
       NotePad.Notes.COLUMN_NAME_TITLE, // 1    
       NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE,//在这里加入了修改时间的显示    
-   };    
+     };    
  
 3.修改适配器内容，增加dataColumns中装配到ListView的内容，所以要同时增加一个ID标识来存放该时间参数。 
-  // The names of the cursor columns to display in the view, initialized to the title column
-  String[] dataColumns = { NotePad.Notes.COLUMN_NAME_TITLE,
+
+    // The names of the cursor columns to display in the view, initialized to the title column
+    String[] dataColumns = { NotePad.Notes.COLUMN_NAME_TITLE,
        NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE //增加时间参数} ;
-  // The view IDs that will display the cursor columns, initialized to the TextView in noteslist_item.xml
-  int[] viewIDs = { android.R.id.text1 ,android.R.id.text2};
+    // The view IDs that will display the cursor columns, initialized to the TextView in noteslist_item.xml
+    int[] viewIDs = { android.R.id.text1 ,android.R.id.text2};
 
 4.在NoteEditor文件的updateNote方法中获取当前系统的时间，并对时间进行格式化 
-   // Sets up a map to contain values to be updated in the provider.   
+
+     // Sets up a map to contain values to be updated in the provider.   
       ContentValues values = new ContentValues();  
-   // 转化时间格式
+     // 转化时间格式
+   
       Long now = Long.valueOf(System.currentTimeMillis());  
       SimpleDateFormat sf = new SimpleDateFormat("yy/MM/dd HH:mm");  
       Date d = new Date(now);  
       String format = sf.format(d);  
       values.put(NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE, format);
-添加搜索框功能： 
+添加搜索框功能：
+
+
 1.搜索组件在主页面的菜单选项中，所以应在list_options_menu.xml布局文件中添加搜索功能 
-   <item
+
+     <item
       android:id="@+id/menu_search"
       android:icon="@android:drawable/ic_menu_search"
       android:title="@string/menu_search"
@@ -45,11 +58,11 @@
 
 2.新建一个查找笔记内容的布局文件note_search.xm; 
 
- <?xml version="1.0" encoding="utf-8"?>
- <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
- android:layout_width="match_parent"
- android:layout_height="match_parent"
- android:orientation="vertical">
+    <?xml version="1.0" encoding="utf-8"?>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
      <SearchView
          android:id="@+id/search_view"
          android:layout_width="match_parent"
@@ -61,7 +74,7 @@
          android:layout_width="match_parent"
          android:layout_height="wrap_content"
          />
- </LinearLayout>
+    </LinearLayout>
 
 3.在NoteList类中的onOptionsItemSelected方法中添加search查询的处理(跳转) 
 
@@ -72,7 +85,9 @@
           this.startActivity(intent);  
           return true;  
 
-4.新建一个NoteSearch类用于search功能的功能实现 
+4.新建一个NoteSearch类用于search功能的功能实现
+
+
     package com.example.android.notepad;
     import android.app.Activity;
     import android.content.Intent;
@@ -159,10 +174,15 @@
     }
     }
 5.最后要在清单文件AndroidManifest.xml里面注册NoteSearch,否则无法实现界面的跳转
-    <activity android:name=".NoteSearch" android:label="@string/search_note" />
+       
+       <activity android:name=".NoteSearch" android:label="@string/search_note" />
 
 
+时间戳功能图如下：
 
 ![](https://github.com/Allenlweis/a-little-try/blob/master/images/1.png)
 ![](https://github.com/Allenlweis/a-little-try/blob/master/images/2.png)
+
+搜索功能图如下：
+
 ![](https://github.com/Allenlweis/a-little-try/blob/master/images/3.png)
